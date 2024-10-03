@@ -237,3 +237,5 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
 
          we can also add multiple end points on each cluster..
 
+## Block Certain request
+
