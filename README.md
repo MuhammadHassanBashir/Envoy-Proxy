@@ -41,4 +41,10 @@ A few definitions before we dive into the main architecture documentation. Some 
      - envoy.filters.network.http_connection_manager
    - MongoDB/MySQL Network Filter
 
+- Connection Pools
+  - Each Host in a cluster gets 1 or more conneciton pools
+  - Each protocol get a pool HTTP 1.1, HTTP/2
+  - More pools allocated per priority or socket options
+  - Connection Pools are per worker thread
+
 
