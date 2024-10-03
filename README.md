@@ -172,18 +172,18 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
                           - "*"
                        routes:          --------> here we will be matching 
                           - name:
-                            match:
-                              prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
-                            route:
-                                 cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
-                          - name:
                             match: { prefix: "/app1"}   --> anything come with "/app1" prefix will go to app1_cluster
                             route:
                                cluster: app1_cluster
-                           - name:
+                          - name:
                             match: { prefix: "/app2"}  --> anything come with "/app2" prefix will go to app2_cluster    
                             route:
-                               cluster: app2_cluster    
+                               cluster: app2_cluster   
+                          - name:
+                            match:
+                              prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
+                            route:
+                                 cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .     
                                
                 http_filters:   --->http filter name
                   -   name: envoy.filters.http.router
