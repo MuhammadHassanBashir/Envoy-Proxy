@@ -108,8 +108,8 @@ Example:
                         prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
                       route:
                         cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
-                    http_filters:   --->http filter name
-                       -   name: envoy.filters.http.router
+                http_filters:   --->http filter name
+                  -   name: envoy.filters.http.router
 
 ## here we are builder our all backend cluster
         clusters:
