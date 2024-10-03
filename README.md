@@ -24,3 +24,13 @@ A few definitions before we dive into the main architecture documentation. Some 
 ## Flow
 
   Downstream ----> envoy(listener) ---> cluster(upstream hosts)
+
+## NOTES
+
+- Downstream: Requests come from Downstream
+- Upstream: Responses come from Upstream
+- Service mesh/side car
+- Cluster: Group of hosts/endpoints are called a cluster, Cluster has a load balancing policy.
+- Listeners: listen on a port for downstream clients, It is similar to fronted in HAPROXY, **Network Filters** are applied to Listeners, like TCP/HTTP filters, Transport Sockets TLS.
+
+
