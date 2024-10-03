@@ -87,7 +87,7 @@ Example:
           filter_chains:            ------------> filter chains at address level
           - filters:                
             - name: envoy.filters.network.http_connection_manager
-              typed_config:            ---------> which exact type pulling for         
+              typed_config:            ---------> which exact type pulling for(you can also use this: type.googleapis.com/envoy.config.filters.network.http_connection_manager.v2.HttpConnectionManager)         
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 # used when emitting stats
                 stat_prefix: football_sidecar_hcm_filter
