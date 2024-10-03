@@ -177,11 +177,11 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
                             route:
                                  cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
                           - name:
-                            match: { prefix: "/app1"} 
+                            match: { prefix: "/app1"}   --> anything come with "/app1" prefix will go to app1_cluster
                             route:
                                cluster: app1_cluster
                            - name:
-                            match: { prefix: "/app2"} 
+                            match: { prefix: "/app2"}  --> anything come with "/app2" prefix will go to app2_cluster    
                             route:
                                cluster: app2_cluster    
                                
