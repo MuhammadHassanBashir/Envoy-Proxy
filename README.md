@@ -113,16 +113,17 @@ Example:
 
 ## here we are builder our all backend cluster
         clusters:
-        - name: football_service
-          type: STRICT_DNS
-          lb_policy: ROUND_ROBIN
+        - name: allbackend_cluster      ----> cluster name
+          connect_timeout: 1s           -----> if not connect to the 1s  then request will dead.
+          type: STRICT_DNS                 or write strict_dns
+          lb_policy: ROUND_ROBIN            or write round_robin
           load_assignment:
-            cluster_name: football_service
-            endpoints:
+            cluster_name: allbackend_cluster
+            endpoints:             -----------> endpoint where we listening too..
             - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
                       # reroute to service container in the same K8s deployment
-                      address: 127.0.0.1
-                      port_value: 6200
+                      address: 127.0.0.1               ---> endpoint address 
+                      port_value: 6200                 ----> endpoint port..  
