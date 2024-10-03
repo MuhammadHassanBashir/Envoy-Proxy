@@ -102,12 +102,16 @@ Example:
                   - name: football_sidecar_virtual_host
                     domains:                                 ----------> here you basically filter what domain you gonna match on... rightnow we do not have any domain, so we use all "*".
                     - "*"
-                    routes:
+                    routes:          --------> here we will be matching 
                     - name:
                       match:
-                        prefix: "/"
+                        prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
                       route:
-                        cluster: football_service
+                        cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
+                    http_filters:   --->http filter name
+                       -   name: envoy.filters.http.router
+
+## here we are builder our all backend cluster
         clusters:
         - name: football_service
           type: STRICT_DNS
