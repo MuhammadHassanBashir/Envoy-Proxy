@@ -17,7 +17,6 @@ A few definitions before we dive into the main architecture documentation. Some 
     **Mesh**: A group of hosts that coordinate to provide a consistent network topology. In this documentation, an “Envoy mesh” is a group of Envoy proxies that form a message passing substrate for a distributed system comprised of many different services and application platforms.
     
     **Runtime configuration**: Out of band realtime configuration system deployed alongside Envoy. Configuration settings can be altered that will affect operation without needing to restart Envoy or change the primary configuration.
-
    **Network Filter**:
    **Threading Model**:
    **Connection Pool**:   
