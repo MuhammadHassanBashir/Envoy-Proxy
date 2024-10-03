@@ -205,3 +205,33 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
                       address: 127.0.0.1               ---> endpoint address 
                       port_value: 6200                 ----> endpoint port..  
 
+        - name: app1_cluster      ----> cluster name
+          connect_timeout: 1s           -----> if not connect to the 1s  then request will dead.
+          type: STRICT_DNS                 or write strict_dns
+          lb_policy: ROUND_ROBIN            or write round_robin
+          load_assignment:
+            cluster_name: app1_cluster
+            endpoints:             -----------> endpoint where we listening too..
+            - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                         # reroute to service container in the same K8s deployment
+                      address: 127.0.0.1               ---> endpoint address 
+                      port_value: 6200                 ----> endpoint port..  
+   
+         - name: app2_cluster      ----> cluster name
+           connect_timeout: 1s           -----> if not connect to the 1s  then request will dead.
+           type: STRICT_DNS                 or write strict_dns
+           lb_policy: ROUND_ROBIN            or write round_robin
+           load_assignment:
+             cluster_name: app2_cluster
+             endpoints:             -----------> endpoint where we listening too..
+             - lb_endpoints:
+               - endpoint:
+                  address:
+                   socket_address:
+                      # reroute to service container in the same K8s deployment
+                     address: 127.0.0.1               ---> endpoint address 
+                     port_value: 6200                 ----> endpoint port..  
+
