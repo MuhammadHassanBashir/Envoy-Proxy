@@ -47,4 +47,9 @@ A few definitions before we dive into the main architecture documentation. Some 
   - More pools allocated per priority or socket options
   - Connection Pools are per worker thread
 
+- Threading Model
+  - Single process multi-threadded model
+  - Each thread is bound to a single connection
+  - No coordination b/w threads
+
 
