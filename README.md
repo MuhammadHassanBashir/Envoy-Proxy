@@ -65,12 +65,60 @@ Example:
    -    Disable TLS 1.0/1.1
    -    SSL Labs Test   
 
-Install envoy on ubuntu focal:
+## Install envoy on ubuntu focal:
 
       wget -O- https://apt.envoyproxy.io/signing.key | sudo gpg --dearmor -o /etc/apt/keyrings/envoy-keyring.gpg
       echo "deb [signed-by=/etc/apt/keyrings/envoy-keyring.gpg] https://apt.envoyproxy.io focal main" | sudo tee /etc/apt/sources.list.d/envoy.list
       sudo apt-get update
       sudo apt-get install envoy
       envoy --version
-      
 
+## Envoy.yaml
+
+      static_resources:
+        listeners:            
+        # ingress
+        - name: football_sidecar_listener
+          address:     ------------------> what address are we listening on    
+            socket_address:     -------------> socket address
+              # Entrypoint for service through Envoy
+              address: 0.0.0.0      ---------->  listening on all interfaces(all ips) 
+              port_value: 8080      -----------> listening on port 
+          filter_chains:            ------------> filter chains at address level
+          - filters:                
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:            ---------> which exact type pulling for         
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                # used when emitting stats
+                stat_prefix: football_sidecar_hcm_filter
+                http_filters:
+                - name: envoy.filters.http.router
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                route_config:
+                  name: football_sidecar_http_route_config
+                  virtual_hosts:
+                  # name used when emitting stats, not imp for routing itself
+                  - name: football_sidecar_virtual_host
+                    domains: 
+                    - "*"
+                    routes:
+                    - name:
+                      match:
+                        prefix: "/"
+                      route:
+                        cluster: football_service
+        clusters:
+        - name: football_service
+          type: STRICT_DNS
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: football_service
+            endpoints:
+            - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      # reroute to service container in the same K8s deployment
+                      address: 127.0.0.1
+                      port_value: 6200
