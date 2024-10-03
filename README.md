@@ -140,3 +140,68 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
 ## Command to start envoy
 
       envoy --config-path "file-name like envoy.yaml"
+
+## Spliting Traffic Feature
+
+      static_resources:
+        listeners:            
+        # ingress
+        - name: football_sidecar_listener
+          address:     ------------------> what address are we listening on    
+            socket_address:     -------------> socket address
+              # Entrypoint for service through Envoy
+              address: 0.0.0.0      ---------->  listening on all interfaces(all ips) 
+              port_value: 8080      -----------> listening on port 
+          filter_chains:            ------------> filter chains at address level
+          - filters:                
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:            ---------> which exact type pulling for(you can also use this: type.googleapis.com/envoy.config.filters.network.http_connection_manager.v2.HttpConnectionManager)         
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                # used when emitting stats
+                stat_prefix: football_sidecar_hcm_filter   --------> just giving the name
+                http_filters:
+                - name: envoy.filters.http.router
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                route_config:                               --------> routing listerner traffic to backend
+                  name: football_sidecar_http_route_config   ---------> route name
+                  virtual_hosts:                             ----------> which is your backend cluster
+                  # name used when emitting stats, not imp for routing itself
+                     - name: football_sidecar_virtual_host
+                       domains:                                 ----------> here you basically filter what domain you gonna match on... rightnow we do not have any domain, so we use all "*".
+                          - "*"
+                       routes:          --------> here we will be matching 
+                          - name:
+                            match:
+                              prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
+                            route:
+                                 cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
+                          - name:
+                            match: { prefix: "/app1"} 
+                            route:
+                               cluster: app1_cluster
+                           - name:
+                            match: { prefix: "/app2"} 
+                            route:
+                               cluster: app2_cluster    
+                               
+                http_filters:   --->http filter name
+                  -   name: envoy.filters.http.router
+
+## here we are builder our all backend cluster
+        clusters:
+        - name: allbackend_cluster      ----> cluster name
+          connect_timeout: 1s           -----> if not connect to the 1s  then request will dead.
+          type: STRICT_DNS                 or write strict_dns
+          lb_policy: ROUND_ROBIN            or write round_robin
+          load_assignment:
+            cluster_name: allbackend_cluster
+            endpoints:             -----------> endpoint where we listening too..
+            - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      # reroute to service container in the same K8s deployment
+                      address: 127.0.0.1               ---> endpoint address 
+                      port_value: 6200                 ----> endpoint port..  
+
