@@ -52,4 +52,16 @@ A few definitions before we dive into the main architecture documentation. Some 
   - Each thread is bound to a single connection
   - No coordination b/w threads
 
+Example:
+   -   Test 4 services
+   -   Install envoy
+   -   layer 7 proxying
+      -   proxy to 4 Backends
+      -   Conditional app1 app2
+      -   Prevent admin access
+   -   layer 4 proxying
+   -    Enables HTTPS
+   -    Enables HTTP/2
+   -    Disable TLS 1.0/1.1
+   -    SSL Labs Test   
 
