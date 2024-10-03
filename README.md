@@ -90,17 +90,17 @@ Example:
               typed_config:            ---------> which exact type pulling for(you can also use this: type.googleapis.com/envoy.config.filters.network.http_connection_manager.v2.HttpConnectionManager)         
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 # used when emitting stats
-                stat_prefix: football_sidecar_hcm_filter
+                stat_prefix: football_sidecar_hcm_filter   --------> just giving the name
                 http_filters:
                 - name: envoy.filters.http.router
                   typed_config:
                     "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
-                route_config:
-                  name: football_sidecar_http_route_config
-                  virtual_hosts:
+                route_config:                               --------> routing listerner traffic to backend
+                  name: football_sidecar_http_route_config   ---------> route name
+                  virtual_hosts:                             ----------> which is your backend cluster
                   # name used when emitting stats, not imp for routing itself
                   - name: football_sidecar_virtual_host
-                    domains: 
+                    domains:                                 ----------> here you basically filter what domain you gonna match on... rightnow we do not have any domain, so we use all "*".
                     - "*"
                     routes:
                     - name:
