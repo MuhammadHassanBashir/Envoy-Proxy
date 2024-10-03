@@ -136,4 +136,7 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
                           socket_address:
                             # reroute to service container in the same K8s deployment
                             address: 127.0.0.1               ---> endpoint address 
-                            port_value: 6200                 ----> endpoint port..      
+                            port_value: 6200                 ----> endpoint port..     
+## Command to start envoy
+
+      envoy --config-path "file-name like envoy.yaml"
