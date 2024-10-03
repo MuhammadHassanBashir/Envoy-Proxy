@@ -99,15 +99,15 @@ Example:
                   name: football_sidecar_http_route_config   ---------> route name
                   virtual_hosts:                             ----------> which is your backend cluster
                   # name used when emitting stats, not imp for routing itself
-                  - name: football_sidecar_virtual_host
-                    domains:                                 ----------> here you basically filter what domain you gonna match on... rightnow we do not have any domain, so we use all "*".
-                    - "*"
-                    routes:          --------> here we will be matching 
-                    - name:
-                      match:
-                        prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
-                      route:
-                        cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
+                     - name: football_sidecar_virtual_host
+                       domains:                                 ----------> here you basically filter what domain you gonna match on... rightnow we do not have any domain, so we use all "*".
+                          - "*"
+                       routes:          --------> here we will be matching 
+                          - name:
+                            match:
+                              prefix: "/"   --------> anything come with "/" prefix will go to the backend cluster.
+                           route:
+                              cluster: allbackend_cluster       ----->backend cluster name "allbackend_cluster" .
                 http_filters:   --->http filter name
                   -   name: envoy.filters.http.router
 
