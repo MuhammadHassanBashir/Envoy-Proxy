@@ -235,3 +235,5 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
                      address: 127.0.0.1               ---> endpoint address 
                      port_value: 6200                 ----> endpoint port..  
 
+         we can also add multiple end points on each cluster..
+
