@@ -33,4 +33,12 @@ A few definitions before we dive into the main architecture documentation. Some 
 - Cluster: Group of hosts/endpoints are called a cluster, Cluster has a load balancing policy.
 - Listeners: listen on a port for downstream clients, It is similar to fronted in HAPROXY, **Network Filters** are applied to Listeners, like TCP/HTTP filters, Transport Sockets TLS.
 
+- Network Filters: 
+   - How Envoy maps Listerners and clusters.
+   - TCP Proxy Network Filter
+     - envoy.filters.network.tcp_proxy
+   - HTTP Proxy Network Filter
+     - envoy.filters.network.http_connection_manager
+   - MongoDB/MySQL Network Filter
+
 
