@@ -130,10 +130,10 @@ Example:
 
 remember for multiple endpoints, you just need to copy and paste the endpoint section as it is and change the address and port accordingly...
 
-this section..            
-            - endpoint:
-                  address:
-                    socket_address:
-                      # reroute to service container in the same K8s deployment
-                      address: 127.0.0.1               ---> endpoint address 
-                      port_value: 6200                 ----> endpoint port..      
+      this section..            
+                  - endpoint:
+                        address:
+                          socket_address:
+                            # reroute to service container in the same K8s deployment
+                            address: 127.0.0.1               ---> endpoint address 
+                            port_value: 6200                 ----> endpoint port..      
