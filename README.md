@@ -2,15 +2,15 @@
 
    helm repo add cloudnativeapp https://cloudnativeapp.github.io/charts/curated/
    
-# command to get envoy helm chart   
-
-   helm pull cloudnativeapp/envoy --version 1.5.0 --untar 
-
-# command to install envoy proxy with download helm chart, but before this you need to change the apiversion of PodDisruptionBudget.yaml template from policy/v1beta1 to policy/v1 under envoy templates.
-   
-   helm install envoy ./envoy/ 
-
-# Now install nginx deployment in a same cluster for testing envoy proxy.. and change the envoy backend for setting the backend as nginx service. because we are trying that our envoy proxy forwards traffic to backend nginx service...
+      # command to get envoy helm chart   
+      
+         helm pull cloudnativeapp/envoy --version 1.5.0 --untar 
+      
+      # command to install envoy proxy with download helm chart, but before this you need to change the apiversion of PodDisruptionBudget.yaml template from policy/v1beta1 to policy/v1 under envoy templates.
+         
+         helm install envoy ./envoy/ 
+      
+      # Now install nginx deployment in a same cluster for testing envoy proxy.. and change the envoy backend for setting the backend as nginx service. because we are trying that our envoy proxy forwards traffic to backend nginx service...
 
       like    
       
