@@ -1,6 +1,6 @@
 # Setting Up Envoy Proxy in a Kubernetes Cluster
 
-1. Install Envoy Proxy Using Helm
+## Install Envoy Proxy Using Helm
 
       First, add the Helm repository for the Cloud Native App:
       
@@ -10,7 +10,7 @@
       
       helm pull cloudnativeapp/envoy --version 1.5.0 --untar
      
- 2. Install Envoy Proxy
+## Install Envoy Proxy
       
       Before installing Envoy, modify the PodDisruptionBudget.yaml template within the Envoy chart. Change the apiVersion from policy/v1beta1 to policy/v1.
       
@@ -18,7 +18,7 @@
 
       helm install envoy ./envoy/
 
-3. Deploy an NGINX Service for Testing
+## Deploy an NGINX Service for Testing
 
       Deploy an NGINX service in the same cluster to test the Envoy Proxy. Modify the Envoy configuration to set the backend to the NGINX service, allowing Envoy to forward traffic to it.
       
@@ -72,10 +72,10 @@
                 - socket_address:
                     address: nginx-service.default.svc.cluster.local  # Backend service address
                     port_value: 80  # Backend service port
-              tls_context:
-                sni: www.google.com  # Use this if enabling TLS; otherwise, disable it
+              #tls_context:
+              #  sni: www.google.com  # Use this if enabling TLS; otherwise, disable it
 
-4. Verification
+## Verification
      
        To verify that Envoy is correctly set up, check which port it is listening on. By default, Envoy listens on port 10000. You can confirm this in the envoy.yaml file under the files section.
       
