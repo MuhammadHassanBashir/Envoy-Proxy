@@ -1,26 +1,31 @@
-# Setting up envoy proxy in kubernetes cluster      
-      
-      # Install the envoy proxy using helm in kubernetes cluster.
+# Setting Up Envoy Proxy in a Kubernetes Cluster
 
+1. Install Envoy Proxy Using Helm
+
+      First, add the Helm repository for the Cloud Native App:
+      
       helm repo add cloudnativeapp https://cloudnativeapp.github.io/charts/curated/
-   
-      # command to get envoy helm chart   
       
-         helm pull cloudnativeapp/envoy --version 1.5.0 --untar 
+      Next, pull the Envoy Helm chart:
       
-      # command to install envoy proxy with download helm chart, but before this you need to change the apiversion of PodDisruptionBudget.yaml template from policy/v1beta1 to policy/v1 under envoy templates.
-         
-         helm install envoy ./envoy/ 
+      helm pull cloudnativeapp/envoy --version 1.5.0 --untar
+     
+ 2. Install Envoy Proxy
       
-      # Now install nginx deployment in a same cluster for testing envoy proxy.. and change the envoy backend for setting the backend as nginx service. because we are trying that our envoy proxy forwards traffic to backend nginx service...
+      Before installing Envoy, modify the PodDisruptionBudget.yaml template within the Envoy chart. Change the apiVersion from policy/v1beta1 to policy/v1.
+      
+      Now, install the Envoy Proxy using the following command:
 
-      like    
+      helm install envoy ./envoy/
+
+3. Deploy an NGINX Service for Testing
+
+      Deploy an NGINX service in the same cluster to test the Envoy Proxy. Modify the Envoy configuration to set the backend to the NGINX service, allowing Envoy to forward traffic to it.
       
+      Here’s a sample envoy.yaml configuration:
+
       files:
         envoy.yaml: |-
-          ## refs:
-          ## - https://www.envoyproxy.io/docs/envoy/latest/start/start#quick-start-to-run-simple-example
-          ## - https://raw.githubusercontent.com/envoyproxy/envoy/master/configs/google_com_proxy.v2.yaml
           admin:
             access_log_path: /dev/stdout
             address:
@@ -33,8 +38,8 @@
             - name: listener_0
               address:
                 socket_address:
-                  address: 0.0.0.0           ------------> listening on all ip 
-                  port_value: 10000          -------------> with 10000 port
+                  address: 0.0.0.0  # Listening on all IP addresses
+                  port_value: 10000  # Port for the listener
               filter_chains:
               - filters:
                 - name: envoy.http_connection_manager
@@ -44,29 +49,40 @@
                       config:
                         path: /dev/stdout
                     stat_prefix: ingress_http
-                    route_config:                   ------------------> backend configs set here
+                    route_config:
                       name: local_route
-                      virtual_hosts:                 ----------------> giving backend routes
+                      virtual_hosts:
                       - name: local_service
-                        domains: ["*"]              -------------------> allowing all domains
+                        domains: ["*"]  # Allowing all domains
                         routes:
                         - match:
-                            prefix: "/"            ----------------------> matching prefix
+                            prefix: "/"  # Matching all prefixes
                           route:
                             host_rewrite: www.google.com
-                            cluster: service_google      (name of backend service)  -----------> routing traffic to backend service, in our case it would be nginx service
+                            cluster: service_google  # Name of the backend service (NGINX)
                     http_filters:
                     - name: envoy.router
-            clusters:                                     -----------------> setting backend cluster for envoy proxy and giving backend cluster details here...
-            - name: service_google                        -------------> giving the same backend service name here     
+            clusters:
+            - name: service_google  # Backend service cluster name
               connect_timeout: 0.25s
               type: LOGICAL_DNS
               dns_lookup_family: V4_ONLY
               lb_policy: ROUND_ROBIN
               hosts:
                 - socket_address:
-                    address: nginx-service.default.svc.cluster.local            -----------> gave backend service address here, we can give service FQDN or service name..
-                    port_value: 80                                              -------------> backend service port
+                    address: nginx-service.default.svc.cluster.local  # Backend service address
+                    port_value: 80  # Backend service port
               tls_context:
-                sni: www.google.com                                             --------------> use it tls enable, else disable this.. otherwise it will give you error.. in my case i have not use , so i disable this... after that i got the result...  
-              
+                sni: www.google.com  # Use this if enabling TLS; otherwise, disable it
+
+4. Verification
+     
+       To verify that Envoy is correctly set up, check which port it is listening on. By default, Envoy listens on port 10000. You can confirm this in the envoy.yaml file under the files section.
+      
+      You can also describe the Envoy deployment and service to verify the targetPort, containerPort, and servicePort. Ensure that at least the targetPort and containerPort are the same.
+      
+      Once confirmed, port-forward the Envoy service to a local port and verify that it forwards traffic to the backend service. You can do this by browsing to:
+
+      http://localhost:<localport>
+      
+      By following these steps, you should have a functioning Envoy Proxy set up to route traffic to your NGINX service.
