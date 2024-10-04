@@ -1,4 +1,6 @@
-# Install the envoy proxy using helm in kubernetes cluster.
+# Setting up envoy proxy in kubernetes cluster      
+      
+      # Install the envoy proxy using helm in kubernetes cluster.
 
       helm repo add cloudnativeapp https://cloudnativeapp.github.io/charts/curated/
    
