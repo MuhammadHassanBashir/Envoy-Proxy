@@ -39,6 +39,7 @@ data:
                           "@type": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
                           path: /dev/stdout
                     stat_prefix: ingress_http
+                    codec_type: AUTO          # Envoy will automatically support HTTP/1.1 and HTTP/2
                     route_config:
                       name: local_route
                       virtual_hosts:
@@ -57,9 +58,9 @@ data:
                           "@type": type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
                           stat_prefix: local_rate_limit
                           token_bucket:
-                            max_tokens: 10  # Limit to 20 requests per minute
+                            max_tokens: 10  # Limit to 10 requests per minute
                             tokens_per_fill: 10
-                            fill_interval: 30s  # Refill every 60 seconds
+                            fill_interval: 30s  # Refill every 30 seconds
                           filter_enabled:
                             runtime_key: local_rate_limit_enabled
                             default_value:
@@ -81,10 +82,11 @@ data:
 
       clusters:
         - name: service_google
-          connect_timeout: 0.25s
+          connect_timeout: 30s
           type: LOGICAL_DNS
           dns_lookup_family: V4_ONLY
           lb_policy: ROUND_ROBIN
+          http2_protocol_options: {}     # This ensures HTTP/2 support for upstream communication
           load_assignment:
             cluster_name: service_google
             endpoints:
