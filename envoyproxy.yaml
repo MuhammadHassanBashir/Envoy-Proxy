@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy-deployment
+  namespace: envoy
+  labels:
+    app: envoy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: envoy
+  template:
+    metadata:
+      labels:
+        app: envoy
+    spec:
+      containers:
+        - name: envoy
+          image: envoyproxy/envoy:v1.26.0  # Replace with the latest version
+          ports:
+            - containerPort: 9901  # Envoy admin port
+            - containerPort: 10000 # Your service port
+          args:
+            - "--config-path"
+            - "/etc/envoy/envoy.yaml"
+          volumeMounts:
+          - name: envoy-config-volume
+            mountPath: /etc/envoy  
+      volumes:
+        - name: envoy-config-volume
+          configMap:
+            name: envoy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: envoy-service
+  namespace: envoy
+spec:
+  ports:
+    - name: admin
+      port: 9901
+      targetPort: 9901
+    - name: http
+      port: 10000
+      targetPort: 10000
+  selector:
+    app: envoy
