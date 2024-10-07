@@ -239,3 +239,10 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
 
 ## Block Certain request
 
+
+## Troubleshoot Envoy
+   
+   install package in container using terminal 
+   kubectl exec -it pod/envoy-686984d4c-9bw9c -- bash -c "apt-get update && apt-get install -y curl"
+   kubectl exec -it pod/envoy-686984d4c-9bw9c -- apt-get update
+   kubectl exec -it pod/envoy-686984d4c-9bw9c -- apt-get install curl -y
