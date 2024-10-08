@@ -341,44 +341,43 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
 
    Bash script to test rate limiting 
 
-   # Initialize counters
-   count_200=0
-   count_429=0
-   count_503=0
-   count_502=0
-   count_other=0
-   
-   # Loop to send 60 requests
-   for i in {1..60}; do
-     echo "Request $i:"
-     
-     # Send request and capture the HTTP response code
-     response=$(curl -s -o /dev/null -w "%{http_code}" -I -X GET https://envoy.disearch.ai/)
-   
-     # Display the response code for each request
-     echo "Response code: $response"
-     
-     # Increment counters based on response code
-     if [ "$response" -eq 200 ]; then
-       ((count_200++))
-     elif [ "$response" -eq 429 ]; then
-       ((count_429++))
-     elif [ "$response" -eq 503 ]; then
-       ((count_503++))
-     elif [ "$response" -eq 502 ]; then
-       ((count_502++))
-     else
-       ((count_other++))
-     fi
-     
-     echo ""  # Add a blank line between results for readability
-   done
-   
-   # Print the counts at the end
-   echo "Summary:"
-   echo "200 responses: $count_200"
-   echo "429 responses: $count_429"
-   echo "503 responses: $count_503"
-   echo "502 responses: $count_502"
-   echo "Other responses: $count_other"
-
+      # Initialize counters
+      count_200=0
+      count_429=0
+      count_503=0
+      count_502=0
+      count_other=0
+      
+      # Loop to send 60 requests
+      for i in {1..60}; do
+        echo "Request $i:"
+        
+        # Send request and capture the HTTP response code
+        response=$(curl -s -o /dev/null -w "%{http_code}" -I -X GET https://envoy.disearch.ai/)
+      
+        # Display the response code for each request
+        echo "Response code: $response"
+        
+        # Increment counters based on response code
+        if [ "$response" -eq 200 ]; then
+          ((count_200++))
+        elif [ "$response" -eq 429 ]; then
+          ((count_429++))
+        elif [ "$response" -eq 503 ]; then
+          ((count_503++))
+        elif [ "$response" -eq 502 ]; then
+          ((count_502++))
+        else
+          ((count_other++))
+        fi
+        
+        echo ""  # Add a blank line between results for readability
+      done
+      
+      # Print the counts at the end
+      echo "Summary:"
+      echo "200 responses: $count_200"
+      echo "429 responses: $count_429"
+      echo "503 responses: $count_503"
+      echo "502 responses: $count_502"
+      echo "Other responses: $count_other"
