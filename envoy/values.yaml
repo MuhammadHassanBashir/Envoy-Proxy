@@ -195,11 +195,6 @@ files:
                         socket_address:
                           address: nginx-service.default.svc.cluster.local
                           port_value: 80
-          transport_socket:
-            name: envoy.transport_sockets.tls
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-              sni: envoy.disearch.ai
 
  #   overload:
  #     global_downstream_max_connections: 1000
