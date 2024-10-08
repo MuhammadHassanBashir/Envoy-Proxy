@@ -264,8 +264,8 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
 
 ## Command to manually test the certificate
 
-   curl -vI https://envoy.disearch.ai
-   
+   curl -vI https://envoy.disearch.ai or curl -kv https://envoy.disearch.ai --> -kv ingnore the certificate
+    
    *   Trying 34.117.212.151:443...
    * TCP_NODELAY set
    * Connected to envoy.disearch.ai (34.117.212.151) port 443 (#0)
@@ -275,9 +275,59 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
    *   CAfile: /etc/ssl/certs/ca-certificates.crt
      CApath: /etc/ssl/certs
    * TLSv1.3 (OUT), TLS handshake, Client hello (1):
-   * OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to envoy.disearch.ai:443 
-   * Closing connection 0
-   curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to envoy.disearch.ai:443    
+   * TLSv1.3 (IN), TLS handshake, Server hello (2):
+   * TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+   * TLSv1.3 (IN), TLS handshake, Certificate (11):
+   * TLSv1.3 (IN), TLS handshake, CERT verify (15):
+   * TLSv1.3 (IN), TLS handshake, Finished (20):
+   * TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+   * TLSv1.3 (OUT), TLS handshake, Finished (20):
+   * SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+   * ALPN, server accepted to use h2
+   * Server certificate:
+   *  subject: CN=envoy.disearch.ai
+   *  start date: Oct  8 17:25:10 2024 GMT
+   *  expire date: Jan  6 18:16:42 2025 GMT
+   *  subjectAltName: host "envoy.disearch.ai" matched cert's "envoy.disearch.ai"
+   *  issuer: C=US; O=Google Trust Services; CN=WR3
+   *  SSL certificate verify ok.
+   * Using HTTP2, server supports multi-use
+   * Connection state changed (HTTP/2 confirmed)
+   * Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+   * Using Stream ID: 1 (easy handle 0x558f5d3a5340)
+   > HEAD / HTTP/2
+   > Host: envoy.disearch.ai
+   > user-agent: curl/7.68.0
+   > accept: */*
+   > 
+   * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+   * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+   * old SSL session ID is stale, removing
+   * Connection state changed (MAX_CONCURRENT_STREAMS == 100)!
+   < HTTP/2 200 
+   HTTP/2 200 
+   < server: envoy
+   server: envoy
+   < date: Tue, 08 Oct 2024 21:27:50 GMT
+   date: Tue, 08 Oct 2024 21:27:50 GMT
+   < content-type: text/html
+   content-type: text/html
+   < content-length: 615
+   content-length: 615
+   < last-modified: Wed, 02 Oct 2024 15:13:19 GMT
+   last-modified: Wed, 02 Oct 2024 15:13:19 GMT
+   < etag: "66fd630f-267"
+   etag: "66fd630f-267"
+   < accept-ranges: bytes
+   accept-ranges: bytes
+   < x-envoy-upstream-service-time: 0
+   x-envoy-upstream-service-time: 0
+   < via: 1.1 google
+   via: 1.1 google
+   < alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+   alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+   
+   <
+   * Connection #0 to host envoy.disearch.ai left intact  
+   
 
-
-   rightnow it is giving error in my case.
