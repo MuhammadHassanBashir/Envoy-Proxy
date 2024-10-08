@@ -262,8 +262,22 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
       {{ $value | default "" | indent 4 }}
       {{- end -}}   
 
-## Manually test the certificate
+## Command to manually test the certificate
 
    curl -vI https://envoy.disearch.ai
+   
+   *   Trying 34.117.212.151:443...
+   * TCP_NODELAY set
+   * Connected to envoy.disearch.ai (34.117.212.151) port 443 (#0)
+   * ALPN, offering h2
+   * ALPN, offering http/1.1
+   * successfully set certificate verify locations:
+   *   CAfile: /etc/ssl/certs/ca-certificates.crt
+     CApath: /etc/ssl/certs
+   * TLSv1.3 (OUT), TLS handshake, Client hello (1):
+   * OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to envoy.disearch.ai:443 
+   * Closing connection 0
+   curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to envoy.disearch.ai:443    
 
 
+   rightnow it is giving error in my case.
