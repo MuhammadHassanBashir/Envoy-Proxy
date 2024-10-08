@@ -261,3 +261,9 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
         {{ $key }}: |-
       {{ $value | default "" | indent 4 }}
       {{- end -}}   
+
+## Manually test the certificate
+
+   curl -vI https://envoy.disearch.ai
+
+
