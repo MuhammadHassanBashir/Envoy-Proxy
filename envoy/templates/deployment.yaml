@@ -17,6 +17,7 @@ spec:
       containers:
         - name: envoy
           image: envoyproxy/envoy:v1.26.0  # Replace with the latest version
+          imagePullPolicy: Always
           ports:
             - containerPort: 9901  # Envoy admin port
             - containerPort: 10000 # Your service port
