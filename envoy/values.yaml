@@ -187,7 +187,7 @@ files:
                                   allow_headers: "content-type"
                                   allow_methods: "POST"
                                   max_age: "100"   
-                          # FOR RATE DDOS AND RATE LIMIT PROTECTION       
+                          # FOR DDOS AND RATE LIMIT PROTECTION       
                           typed_per_filter_config:
                             envoy.filters.http.local_ratelimit:
                               "@type": type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
