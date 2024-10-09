@@ -152,6 +152,7 @@ files:
                           "@type": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
                           path: /dev/stdout
                     stat_prefix: ingress_http
+                    # SET TO ALLOW HTTP/1.1 AND HTTP/2 PROTOCAL
                     codec_type: AUTO
                     route_config:
                       name: local_route
