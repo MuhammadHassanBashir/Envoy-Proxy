@@ -381,3 +381,27 @@ remember for multiple endpoints, you just need to copy and paste the endpoint se
       echo "503 responses: $count_503"
       echo "502 responses: $count_502"
       echo "Other responses: $count_other"
+
+      Example Scenario
+      Time Frame: 30 seconds
+      Configured Limit: 10 requests
+      Sequence of Requests
+      0-30 seconds: Send 10 requests
+      
+      Responses: 10 × 200 OK
+      30 seconds: Send 1 more request (11th request)
+      
+      Response: 429 Too Many Requests
+      31 seconds: Send another request (12th request)
+      
+      Response: 429 Too Many Requests
+      31-60 seconds: Wait for 30 seconds to allow the rate limit to reset.
+      
+      60 seconds: Send a request
+      
+      Response: 200 OK (rate limit reset)
+      Summary
+      You will not get multiple 429 Too Many Requests responses in rapid succession; it generally only applies to the first request that exceeds the limit.
+      After the initial 429, all subsequent requests will continue to receive 429 responses until the rate limit reset occurs after the fill interval.
+      Once the limit is reset, you can start sending requests again, and they will return 200 OK until you exceed the limit once more.
+
