@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-config
+  namespace: envoy
+data:
+{{- range $key, $value := .Values.files }}
+  {{ $key }}: |-
+{{ $value | default "" | indent 4 }}
+{{- end -}}

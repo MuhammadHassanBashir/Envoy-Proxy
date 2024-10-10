@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: envoy-service
+  namespace: envoy
+spec:
+  ports:
+    - name: admin
+      port: 9901
+      targetPort: 9901
+    - name: http
+      port: 10000
+      targetPort: 10000
+  selector:
+    app: envoy
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: envoy-ingress
+  namespace: envoy
+  annotations:
+  #  kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.class: "gce" 
+    kubernetes.io/ingress.global-static-ip-name: envoy-proxy
+    networking.gke.io/managed-certificates: managed-cert
+spec:
+  #ingressClassName: gce  # Specify the Ingress class here   
+  rules:
+  - host: assistant.disearch.ai
+    http:
+      paths:
+      - path: /
+      #  pathType: ImplementationSpecific 
+        pathType: Prefix 
+        backend:                      ## mapping ingress with service
+          service:
+            name: envoy-service    
+            port: 
+              number: 10000               
+
+---
+
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: managed-cert
+  namespace: envoy  
+spec:
+  domains:
+  - assistant.disearch.ai    
+
+---
+
+#apiVersion: cloud.google.com/v1
+#kind: BackendConfig
+#metadata:
+#  name: my-backendconfig
+#spec:
+#  healthCheck:
+#    checkIntervalSec: 15
+#    timeoutSec: 5              # Timeout for each health check
+#    unhealthyThreshold: 3      # Number of failed health checks to consider the pod unhealthy
+#    healthyThreshold: 1        # Number of successful health checks to consider the pod healthy
+#    type: HTTP                 # Health check protocol (HTTP)
+#    port: 10000                # The port Envoy is serving on
+#    requestPath: /healthz      # The health check endpoint on your application

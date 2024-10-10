@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-askangie-deployment
+  namespace: envoy
+  labels:
+    app: chatbot-askangie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot-askangie
+  template:
+    metadata:
+      labels:
+        app: chatbot-askangie
+    spec:
+      serviceAccountName: gke-sa
+      containers:
+      - name: chatbot-askangie-container
+        image: gcr.io/disearch/chatbot-askangie-external:latest
+        ports:
+        - containerPort: 8000
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "ask-angie-external"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "app"
+                operator: "In"
+                values:
+                - "ask-angie-external"
+ 
+---
+ 
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot-askangie-service
+  namespace: envoy
+  labels:
+    app: chatbot-askangie
+spec:
+  selector:
+    app: chatbot-askangie
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

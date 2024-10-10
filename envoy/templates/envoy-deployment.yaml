@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy-deployment
+  namespace: envoy
+  labels:
+    app: envoy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: envoy
+  template:
+    metadata:
+      labels:
+        app: envoy
+    spec:
+      containers:
+      - name: envoy
+        image: envoyproxy/envoy:v1.26.0  # Replace with the latest version
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 9901  # Envoy admin port
+          - containerPort: 10000 # Your service port
+        args:
+          - "--config-path"
+          - "/etc/envoy/envoy.yaml"
+        volumeMounts:
+        - name: envoy-config-volume
+          mountPath: /etc/envoy
+      tolerations:
+      - key: "app"
+        operator: "Equal"
+        value: "ask-angie-external"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "app"
+                operator: "In"
+                values:
+                - "ask-angie-external"    
+          # Define Liveness Probe
+   #       livenessProbe:
+   #         httpGet:
+   #           path: /healthz   # Health check endpoint
+   #           port: 10000
+   #         initialDelaySeconds: 10  # Time after container start before liveness probe starts
+   #         periodSeconds: 10         # Time between health checks
+   #         failureThreshold: 3       # Number of failures before marking the pod as unhealthy
+          # Define Readiness Probe
+   #       readinessProbe:
+   #         httpGet:
+   #           path: /healthz   # Health check endpoint
+   #           port: 10000
+   #         initialDelaySeconds: 5    # Time after container start before readiness probe starts
+   #         periodSeconds: 5          # Time between health checks
+      volumes:
+        - name: envoy-config-volume
+          configMap:
+            name: envoy-config
