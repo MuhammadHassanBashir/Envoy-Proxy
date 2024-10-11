@@ -4,11 +4,11 @@ FOR CREATING ENVOY PROXY WITH ASKANGIE BACKEND. THE FOLLOWING SERVICE ALSO NEED 
 
 - RESERVE THE IP FOR APPLICATION LOAD BALANCER USING GCLOUD COMMAND
 
-   **cloud compute addresses create envoy-proxy --global  
+       **cloud compute addresses create envoy-proxy --global  
 
    Verify the creation and obtain details of the reserved static IP.
 
-   **gcloud compute addresses describe nginxexample --global
+       **gcloud compute addresses describe nginxexample --global
 
 - CONFIGURE THE WORKLOAD IDENTITY IN ENVOY NAMESPACE FOR ASKENGI DEPLOYMENT
 
